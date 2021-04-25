@@ -104,9 +104,6 @@ void draw(){
     if (ScreenSet == 1 && BackHomePage == false) ScreenChange(1,5);
     if (ScreenSet == 1 && BackHomePage == true) ScreenChange(2,5);
   }
-fill(0);
-textSize(32);
-text(CheckToNext,0,32);
   
 }
 
@@ -143,8 +140,6 @@ void GamePage(){
 }
 
 void mousePressed(){
-  if (mouseX < 100 && mouseY <100) CheckToNext = max(0,CheckToNext -= 5);
-  if (mouseX < width && mouseX > width-100 && mouseY <100) CheckToNext = min(204,CheckToNext += 5);
   if(MousePressedOff){
   //StartPage Key
     if(ScreenSet == 0){
