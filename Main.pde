@@ -29,7 +29,7 @@ int BGNext = 0;
 //PeoPle Random Set
 int PeoPleMove , PeoPleTransparency; //PeoPleTransparency = 0; PeoPleMove = 0; on NextScript
 boolean SiteStartSet = false; // SiteStartSet = true; on NextScript
-int PeoPleCeilingDistance = 0;
+int PeoPleCeilingDistance = 50;
 PImage [][] PeoPlePicture = new PImage [7][11];
 String [] PeoPle1Type; 
 String [] PeoPle1Face;
@@ -43,7 +43,6 @@ boolean BackHomePage = false;
 
 void setup(){
   size(1280,960);
-  frameRate(120);
   ScriptTextType = createFont("Type.ttf", 32);
   textFont(ScriptTextType);
   CahangeRect[0] = 0;
@@ -82,7 +81,7 @@ void setup(){
   SpecialObject = loadStrings("Data/SpecialObject.txt");
   BGData = loadStrings("Data/BackGround_Change.txt");
   for (int i = 0 ; i < PeoPleSite.length ; i++){ if(int(PeoPleSite[i]) == 0) PeoPleSite[i] = "Left"; if(int(PeoPleSite[i]) == 1) PeoPleSite[i] = "Mid"; if(int(PeoPleSite[i]) == 2) PeoPleSite[i] = "Right"; }
-  ScriptTable[0] =loadImage("Picture/Script_Table.gif");
+  ScriptTable[0] =loadImage("Picture/Script_Table.png");
   ScriptTable[1] =loadImage("Picture/Script_Name.gif");
   for (int i = 0 ; i < 7 ; i ++){
     BG[i] = loadImage("Picture/BackGround/"+ i +".jpg");
@@ -95,7 +94,7 @@ void setup(){
   ScriptText[14] = ScriptText[14].substring(0,25) + "\n" + ScriptText[14].substring(25,ScriptText[14].length());
   ScriptText[15] = ScriptText[15].substring(0,33) + "\n" + ScriptText[15].substring(25,ScriptText[15].length());
   
-  
+  CheckToNext=199;
   
   
   
@@ -119,7 +118,9 @@ void draw(){
 
 void StartPage(){
   fill(0);
+  tint(255, 255);
   image(StartPageBG,0,0);
+  CheckToNext = 0;
   for (int i = 0 ; i < 3 ; i ++){
       if (StartPageIconXY[0][i] < mouseX && mouseX < (StartPageIconXY[0][i] + StartPageIconWH[0]) && StartPageIconXY[1][i] < mouseY && mouseY < (StartPageIconXY[1][i]+StartPageIconWH[1])) {
         image(StartPageIcon[i*2+1],StartPageIconXY[0][i],StartPageIconXY[1][i]);
@@ -148,7 +149,7 @@ void GamePage(){
     BackHomePage = true;
     ChangeBegin = true;
   }
-  if (int(SpecialObject[CheckToNext]) == 1) CheckToNext += 1;
+  if (CheckToNext <= ScriptText.length-1 && int(SpecialObject[CheckToNext]) == 1) CheckToNext += 1;
 }
 
 void mousePressed(){
@@ -202,17 +203,17 @@ void ScreenChange(int ChangeType,int Rate){
 void ScriptLoad(int ScriptTextNumber,int ScriptTextSize,boolean DiffColor,int DiffColorBeginNumber){
   tint(255, 255*0.7);
   image(ScriptTable[0],width/2-ScriptTable[0].width/2,height-ScriptTable[0].height-30);
-  if(ScriptPeoPleName[ScriptTextNumber].length() > 0) image(ScriptTable[1],40,490);
+  if(ScriptPeoPleName[ScriptTextNumber].length() > 0) image(ScriptTable[1],40,575);
   textSize(ScriptTextSize);
   fill(0);
-  text(ScriptPeoPleName[ScriptTextNumber],40+(ScriptTable[1].width/2)-(textWidth(ScriptPeoPleName[ScriptTextNumber])/2),490+89/2+ScriptTextSize/2);
+  if(ScriptPeoPleName[ScriptTextNumber].length() > 0) text(ScriptPeoPleName[ScriptTextNumber],40+(ScriptTable[1].width/2)-(textWidth(ScriptPeoPleName[ScriptTextNumber])/2),575+89/2+ScriptTextSize/2);
   if (DiffColor && ScriptText[ScriptTextNumber].length() > DiffColorBeginNumber) {
     fill(255,0,0);
-    text(ScriptText[ScriptTextNumber],width/2-ScriptTable[0].width/2+20,height-ScriptTable[0].height-30+20,ScriptTable[0].width-40,ScriptTable[0].height-40);
+    text(ScriptText[ScriptTextNumber],width/2-ScriptTable[0].width/2+50,height-ScriptTable[0].height-30+20,ScriptTable[0].width-100,ScriptTable[0].height-40);
     fill(0);
-    text(ScriptText[ScriptTextNumber].substring(0,DiffColorBeginNumber-1),width/2-ScriptTable[0].width/2+20,height-ScriptTable[0].height-30+20,ScriptTable[0].width-40,ScriptTable[0].height-40);
+    text(ScriptText[ScriptTextNumber].substring(0,DiffColorBeginNumber-1),width/2-ScriptTable[0].width/2+50,height-ScriptTable[0].height-30+20,ScriptTable[0].width-100,ScriptTable[0].height-40);
   }else{
-    text(ScriptText[ScriptTextNumber],int(width/2-ScriptTable[0].width/2+20),height-ScriptTable[0].height-30+20,ScriptTable[0].width-40,ScriptTable[0].height-40);
+    text(ScriptText[ScriptTextNumber],int(width/2-ScriptTable[0].width/2+50),height-ScriptTable[0].height-30+20,ScriptTable[0].width-100,ScriptTable[0].height-40);
   }
 }
 
