@@ -6,6 +6,7 @@ int ScreenSet = 0;
 int [] CahangeRect = new int[2];
 boolean ChangeBegin = false;
 boolean MousePressedOff = true;
+boolean MousePressedOff2 = true;
 
 //StartPage Random Set
 PImage StartPageBG;
@@ -57,8 +58,8 @@ void setup(){
   StartPageIcon[3] = loadImage("Picture/Continue_B.jpg");
   StartPageIcon[4] = loadImage("Picture/Exit_A.jpg");
   StartPageIcon[5] = loadImage("Picture/Exit_B.jpg");
-  StartPageIconWH[0] = 421;
-  StartPageIconWH[1] = 108;
+  StartPageIconWH[0] = StartPageIcon[0].width;
+  StartPageIconWH[1] = StartPageIcon[0].height;
   StartPageIconXY[0][0] = width/2-StartPageIconWH[0]/2;
   StartPageIconXY[0][1] = width/2-StartPageIconWH[0]/2;
   StartPageIconXY[0][2] = width/2-StartPageIconWH[0]/2;
@@ -130,15 +131,15 @@ void StartPage(){
 }
 
 void GamePage(){
-  image(BG[int(BGData[BGNext])],0,0);
+  if (CheckToNext <= ScriptText.length-1) image(BG[int(BGData[BGNext])],0,0);
   if (CheckToNext < ScriptText.length-1){
     BackHomePage = false;
     if(PeoPleMoveType[CheckToNext].length() > 0) CharaCterAnimateSelect(int(PeoPleMoveType[CheckToNext]),PeoPlePicture[int(PeoPle1Type[CheckToNext])][int(PeoPle1Face[CheckToNext])],PeoPlePicture[int(PeoPle2Type[CheckToNext])][int(PeoPle2Face[CheckToNext])],PeoPleSite[CheckToNext],10,15);
     if(int(ChangeScenesOn[CheckToNext]) == 1) ChangeBegin = true;  
     if(int(ScriptOn[CheckToNext]) == 1) {
       if(CheckToNext == 23) ScriptLoad(23,32,true,15);
-      if(CheckToNext == 38 || CheckToNext == 56) ScriptLoad(CheckToNext,48,true,15);
-      if(CheckToNext != 23 && CheckToNext != 38 && CheckToNext != 56) ScriptLoad(CheckToNext,32,false,0); 
+      if(CheckToNext == 38 || CheckToNext == 56 || CheckToNext == 116) ScriptLoad(CheckToNext,48,true,15);
+      if(CheckToNext != 23 && CheckToNext != 38 && CheckToNext != 56 && CheckToNext != 116) ScriptLoad(CheckToNext,32,false,0); 
     }
   }else if ( CheckToNext == ScriptText.length-1 ){
     ScriptLoad(ScriptText.length-1,32,false,0);
@@ -150,7 +151,7 @@ void GamePage(){
 }
 
 void mousePressed(){
-  if(MousePressedOff){
+  if(MousePressedOff == true && MousePressedOff2==true){
   //StartPage Key
     if(ScreenSet == 0){
       if(CheckStartPageIcon[0]) ChangeBegin = true;
@@ -164,7 +165,14 @@ void mousePressed(){
       PeoPleTransparency = 0;
       PeoPleMove = 0;
     }
+    MousePressedOff2 = false;
   }
+  
+}
+
+void mouseReleased(){
+  
+  MousePressedOff2 = true;
   
 }
 
