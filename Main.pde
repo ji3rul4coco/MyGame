@@ -160,7 +160,7 @@ void mousePressed(){
   //GamePage Key
     if(ScreenSet == 1){
       CheckToNext += 1;
-      BGNext =CheckToNext;
+      BGNext = CheckToNext;
       SiteStartSet = true;
       PeoPleTransparency = 0;
       PeoPleMove = 0;
