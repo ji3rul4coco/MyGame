@@ -43,6 +43,7 @@ boolean BackHomePage = false;
 
 void setup(){
   size(1280,960);
+  frameRate(120);
   ScriptTextType = createFont("Type.ttf", 32);
   textFont(ScriptTextType);
   CahangeRect[0] = 0;
