@@ -20,7 +20,7 @@ PImage [] ScriptTable = new PImage[2]; //Table = 1201*334 Name = 281*89
 String [] ScriptText,ScriptPeoPleName,ScriptOn,ChangeScenesOn;
 PFont ScriptTextType;
 int CheckToNext = 0;
-
+String [] SpecialObject;
 //PeoPle Random Set
 int PeoPleMove , PeoPleTransparency; //PeoPleTransparency = 0; PeoPleMove = 0; on NextScript
 boolean SiteStartSet = false; // SiteStartSet = true; on NextScript
@@ -53,8 +53,8 @@ void setup(){
   StartPageIcon[3] = loadImage("Picture/Continue_B.jpg");
   StartPageIcon[4] = loadImage("Picture/Exit_A.jpg");
   StartPageIcon[5] = loadImage("Picture/Exit_B.jpg");
-  StartPageIconWH[0] = 421;
-  StartPageIconWH[1] = 108;
+  StartPageIconWH[0] = StartPageIcon[0].width;
+  StartPageIconWH[1] = StartPageIcon[0].height;
   StartPageIconXY[0][0] = width/2-StartPageIconWH[0]/2;
   StartPageIconXY[0][1] = width/2-StartPageIconWH[0]/2;
   StartPageIconXY[0][2] = width/2-StartPageIconWH[0]/2;
@@ -73,7 +73,8 @@ void setup(){
   PeoPle2Face = loadStrings("Data/Character/Character_No2_Face.txt");
   PeoPleMoveType = loadStrings("Data/Character/Character_MoveType.txt");
   PeoPleSite = loadStrings("Data/Character/Character_Site.txt");
-  for (int i = 0 ; i < PeoPleSite.length ; i++){ if(int(PeoPleSite[i]) == 0) PeoPleSite[i] = "Left"; if(int(PeoPleSite[i]) == 1) PeoPleSite[i] = "Mid"; if(int(PeoPleSite[i]) == 0) PeoPleSite[i] = "Right"; }
+  SpecialObject = loadStrings("Data/SpecialObject.txt");
+  for (int i = 0 ; i < PeoPleSite.length ; i++){ if(int(PeoPleSite[i]) == 0) PeoPleSite[i] = "Left"; if(int(PeoPleSite[i]) == 1) PeoPleSite[i] = "Mid"; if(int(PeoPleSite[i]) == 2) PeoPleSite[i] = "Right"; }
   ScriptTable[0] =loadImage("Picture/Script_Table.gif");
   ScriptTable[1] =loadImage("Picture/Script_Name.gif");
   for (int i = 0 ; i < 7 ; i ++){
@@ -103,7 +104,9 @@ void draw(){
     if (ScreenSet == 1 && BackHomePage == false) ScreenChange(1,5);
     if (ScreenSet == 1 && BackHomePage == true) ScreenChange(2,5);
   }
-
+fill(0);
+textSize(32);
+text(CheckToNext,0,32);
   
 }
 
@@ -127,15 +130,21 @@ void GamePage(){
     BackHomePage = false;
     if(PeoPleMoveType[CheckToNext].length() > 0) CharaCterAnimateSelect(int(PeoPleMoveType[CheckToNext]),PeoPlePicture[int(PeoPle1Type[CheckToNext])][int(PeoPle1Face[CheckToNext])],PeoPlePicture[int(PeoPle2Type[CheckToNext])][int(PeoPle2Face[CheckToNext])],PeoPleSite[CheckToNext],10,15);
     if(int(ChangeScenesOn[CheckToNext]) == 1) ChangeBegin = true;  
-    if(int(ScriptOn[CheckToNext]) == 1) if(CheckToNext == 23){ ScriptLoad(23,32,true,15); }else{ ScriptLoad(CheckToNext,32,false,0); }
+    if(int(ScriptOn[CheckToNext]) == 1) {
+      if(CheckToNext == 23) ScriptLoad(23,32,true,15);
+      if(CheckToNext == 38 || CheckToNext == 56) ScriptLoad(CheckToNext,48,true,15);
+      if(CheckToNext != 23 && CheckToNext != 38 && CheckToNext != 56) ScriptLoad(CheckToNext,32,false,0); 
+    }
   }else if ( CheckToNext >= ScriptText.length ){
     BackHomePage = true;
     ChangeBegin = true;
   }
-  
+  if (int(SpecialObject[CheckToNext]) == 1) CheckToNext += 1;
 }
 
 void mousePressed(){
+  if (mouseX < 100 && mouseY <100) CheckToNext = max(0,CheckToNext -= 5);
+  if (mouseX < width && mouseX > width-100 && mouseY <100) CheckToNext = min(204,CheckToNext += 5);
   if(MousePressedOff){
   //StartPage Key
     if(ScreenSet == 0){
@@ -145,7 +154,8 @@ void mousePressed(){
   //GamePage Key
     if(ScreenSet == 1){
       CheckToNext += 1;
-      
+      SiteStartSet = true;
+      PeoPleTransparency = 0;
     }
   }
   
@@ -173,6 +183,7 @@ void ScreenChange(int ChangeType,int Rate){
 }
 
 void ScriptLoad(int ScriptTextNumber,int ScriptTextSize,boolean DiffColor,int DiffColorBeginNumber){
+  tint(255, 255*0.7);
   image(ScriptTable[0],width/2-ScriptTable[0].width/2,height-ScriptTable[0].height-30);
   if(ScriptPeoPleName[ScriptTextNumber].length() > 0) image(ScriptTable[1],40,490);
   textSize(ScriptTextSize);
@@ -204,7 +215,7 @@ void CharaCterAnimateSelect(int SelectType,PImage PeoPleNumber1Select,PImage Peo
     TwoPeoPle(PeoPleNumber1Select,PeoPleNumber2Select,false,TRateSet);
     break;
     case 6:
-    OneToTwoPeoPle(PeoPleNumber1Select,PeoPleNumber2Select,SiteSet,MRateSet,false,TRateSet);
+    OneToTwoPeoPle(PeoPleNumber1Select,PeoPleNumber2Select,SiteSet,MRateSet,true,TRateSet);
     break;
     case 10:
     OnePeoPleOff(PeoPleNumber1Select,SiteSet,TRateSet);
