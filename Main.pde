@@ -15,7 +15,7 @@ boolean [] CheckStartPageIcon = new boolean [3];
 int CahangeRect;
 
 void setup(){
-  size(1280,700);
+  size(1280,960);
   ScriptTextType = createFont("Type.ttf", 32);
   textFont(ScriptTextType);
   //StartPage Data Load
