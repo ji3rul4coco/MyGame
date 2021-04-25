@@ -58,8 +58,8 @@ void setup(){
   StartPageIcon[3] = loadImage("Picture/Continue_B.jpg");
   StartPageIcon[4] = loadImage("Picture/Exit_A.jpg");
   StartPageIcon[5] = loadImage("Picture/Exit_B.jpg");
-  StartPageIconWH[0] = StartPageIcon[0].width;
-  StartPageIconWH[1] = StartPageIcon[0].height;
+  StartPageIconWH[0] = 421;
+  StartPageIconWH[1] = 108;
   StartPageIconXY[0][0] = width/2-StartPageIconWH[0]/2;
   StartPageIconXY[0][1] = width/2-StartPageIconWH[0]/2;
   StartPageIconXY[0][2] = width/2-StartPageIconWH[0]/2;
