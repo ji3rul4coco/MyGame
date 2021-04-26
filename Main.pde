@@ -25,6 +25,7 @@ String [] SpecialObject;
 String []BGData;
 PImage []BG = new PImage[7];
 int BGNext = 0;
+boolean StartDraw = false;
 
 //PeoPle Random Set
 int PeoPleMove , PeoPleTransparency; //PeoPleTransparency = 0; PeoPleMove = 0; on NextScript
@@ -102,6 +103,7 @@ void setup(){
 
 void draw(){
 
+if(StartDraw){
   if (ScreenSet == 0) StartPage();
   if (ScreenSet == 1) GamePage();
   
@@ -111,8 +113,8 @@ void draw(){
     if (ScreenSet == 1 && BackHomePage == false) ScreenChange(1,5);
     if (ScreenSet == 1 && BackHomePage == true) ScreenChange(2,5);
   }
-
-  
+  StartDraw = false;
+ } 
 }
 
 
@@ -154,6 +156,7 @@ void GamePage(){
 
 void mousePressed(){
   if(MousePressedOff == true && MousePressedOff2==true){
+StartDraw = true;
   //StartPage Key
     if(ScreenSet == 0){
       if(CheckStartPageIcon[0]) ChangeBegin = true;
