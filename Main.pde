@@ -154,7 +154,7 @@ void GamePage(){
   if (CheckToNext <= ScriptText.length-1 && int(SpecialObject[CheckToNext]) == 1) CheckToNext += 1;
 }
 
-void mousePressed(){
+void mouseReleased(){
   if(MousePressedOff == true && MousePressedOff2==true){
 StartDraw = true;
   //StartPage Key
