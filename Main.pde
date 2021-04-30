@@ -43,7 +43,7 @@ String [] PeoPleSite;
 boolean BackHomePage = false;
 
 void setup(){
-  size(1280,960,P2D);
+  size(1280,960);
   ScriptTextType = createFont("Type.ttf", 32);
   textFont(ScriptTextType);
   CahangeRect[0] = 0;
@@ -143,9 +143,10 @@ void GamePage(){
   
   if (updateOnce[0]){
   //Background
-  if (CheckToNext <= ScriptText.length-1) tint(255, 255); image(BG[int(BGData[BGNext])],0,0);
   //People & Script
   if (CheckToNext < ScriptText.length-1){
+    tint(255, 255); 
+    image(BG[int(BGData[BGNext])],0,0);
     BackHomePage = false;
     if(PeoPleMoveType[CheckToNext].length() > 0) CharaCterAnimateSelect(int(PeoPleMoveType[CheckToNext]),PeoPlePicture[int(PeoPle1Type[CheckToNext])][int(PeoPle1Face[CheckToNext])],PeoPlePicture[int(PeoPle2Type[CheckToNext])][int(PeoPle2Face[CheckToNext])],PeoPleSite[CheckToNext],10,15);
     if(int(ChangeScenesOn[CheckToNext]) == 1) ChangeBegin = true;  
@@ -177,7 +178,7 @@ void mousePressed(){
     }
   //GamePage Key
     if(ScreenSet == 1){
-      if (mouseX < 100 && mouseY < 100){ CheckToNext += 10; }else{ CheckToNext += 1; }
+      if (mouseX < 100 && mouseY < 100){ CheckToNext = min(204,CheckToNext += 50); }else{ CheckToNext += 1; }
       BGNext = CheckToNext;
       SiteStartSet = true;
       PeoPleTransparency = 0;
