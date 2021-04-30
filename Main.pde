@@ -43,7 +43,7 @@ String [] PeoPleSite;
 boolean BackHomePage = false;
 
 void setup(){
-  size(1280,960);
+  size(1280,960,P2D);
   ScriptTextType = createFont("Type.ttf", 32);
   textFont(ScriptTextType);
   CahangeRect[0] = 0;
