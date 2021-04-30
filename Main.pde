@@ -103,7 +103,6 @@ void setup(){
 
 void draw(){
 
-if(StartDraw){
   if (ScreenSet == 0) StartPage();
   if (ScreenSet == 1) GamePage();
   
@@ -113,8 +112,7 @@ if(StartDraw){
     if (ScreenSet == 1 && BackHomePage == false) ScreenChange(1,5);
     if (ScreenSet == 1 && BackHomePage == true) ScreenChange(2,5);
   }
-  StartDraw = false;
- } 
+
 }
 
 
