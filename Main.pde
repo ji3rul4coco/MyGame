@@ -173,11 +173,11 @@ StartDraw = true;
   
 }
 
-void mouseReleased(){
+//void mouseReleased(){
   
-  MousePressedOff2 = true;
+//  MousePressedOff2 = true;
   
-}
+//}
 
 void ScreenChange(int ChangeType,int Rate){
  MousePressedOff = false;
