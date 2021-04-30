@@ -49,6 +49,7 @@ void setup(){
   CahangeRect[1] = 1;
   updateOnce[0] = true;
   updateOnce[1] = false;
+  CheckToNext = 0;
   rectMode(CORNER);
   //StartPage Data Load
   ScreenSet = 0;
@@ -103,8 +104,7 @@ void setup(){
 }
 
 void draw(){
-background(158,23,59);
-
+  
 if (updateOnce[0]){
   if (ScreenSet == 0) StartPage();
   if (ScreenSet == 1) GamePage();
@@ -146,19 +146,36 @@ void GamePage(){
     BackHomePage = false;
     if(PeoPleMoveType[CheckToNext].length() > 0) CharaCterAnimateSelect(int(PeoPleMoveType[CheckToNext]),PeoPlePicture[int(PeoPle1Type[CheckToNext])][int(PeoPle1Face[CheckToNext])],PeoPlePicture[int(PeoPle2Type[CheckToNext])][int(PeoPle2Face[CheckToNext])],PeoPleSite[CheckToNext],10,15);
     if(int(ChangeScenesOn[CheckToNext]) == 1) ChangeBegin = true;  
-    if(int(ScriptOn[CheckToNext]) == 1) {
+    //if(int(ScriptOn[CheckToNext]) == 1) {
+     // if(CheckToNext == 23) ScriptLoad(23,32,true,15);
+      //if(CheckToNext == 38 || CheckToNext == 56 || CheckToNext == 116) ScriptLoad(CheckToNext,48,true,15);
+      //if(CheckToNext != 23 && CheckToNext != 38 && CheckToNext != 56 && CheckToNext != 116) ScriptLoad(CheckToNext,32,false,0); 
+    //}
+  }//else if ( CheckToNext == ScriptText.length-1 ){
+    //ScriptLoad(ScriptText.length-1,32,false,0);
+  //}else{
+   // BackHomePage = true;
+    //ChangeBegin = true;
+  //}
+  
+  
+   if (updateOnce[1] == false) updateOnce[1] = true; updateOnce[0] = false;
+  }
+  
+  if (CheckToNext < ScriptText.length-1){
+   if(int(ScriptOn[CheckToNext]) == 1) {
       if(CheckToNext == 23) ScriptLoad(23,32,true,15);
       if(CheckToNext == 38 || CheckToNext == 56 || CheckToNext == 116) ScriptLoad(CheckToNext,48,true,15);
       if(CheckToNext != 23 && CheckToNext != 38 && CheckToNext != 56 && CheckToNext != 116) ScriptLoad(CheckToNext,32,false,0); 
     }
   }else if ( CheckToNext == ScriptText.length-1 ){
     ScriptLoad(ScriptText.length-1,32,false,0);
-  }else{
+    }else{
     BackHomePage = true;
     ChangeBegin = true;
+    
   }
-   if (updateOnce[1] == false) updateOnce[1] = true; updateOnce[0] = false;
-  }
+  
   if (CheckToNext <= ScriptText.length-1 && int(SpecialObject[CheckToNext]) == 1) CheckToNext += 1; updateOnce[0] = true;
 }
 
@@ -218,8 +235,10 @@ void ScriptLoad(int ScriptTextNumber,int ScriptTextSize,boolean DiffColor,int Di
     fill(0);
     text(ScriptText[ScriptTextNumber].substring(0,DiffColorBeginNumber-1),width/2-ScriptTable[0].width/2+50,height-ScriptTable[0].height-30+20,ScriptTable[0].width-100,ScriptTable[0].height-40);
   }else{
+    fill(0);
     text(ScriptText[ScriptTextNumber],int(width/2-ScriptTable[0].width/2+50),height-ScriptTable[0].height-30+20,ScriptTable[0].width-100,ScriptTable[0].height-40);
   }
+  updateOnce[1] = false;
 }
 
 void CharaCterAnimateSelect(int SelectType,PImage PeoPleNumber1Select,PImage PeoPleNumber2Select,String SiteSet,int MRateSet,int TRateSet){
