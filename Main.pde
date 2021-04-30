@@ -18,6 +18,7 @@ boolean [] CheckStartPageIcon = new boolean [3];
 
 //GamePage Random Set
 PImage [] ScriptTable = new PImage[2]; //Table = 1201*334 Name = 281*89
+int []ScriptTableWH = new int[2] ;
 String [] ScriptText,ScriptPeoPleName,ScriptOn,ChangeScenesOn;
 PFont ScriptTextType;
 int CheckToNext = 0;
@@ -49,7 +50,6 @@ void setup(){
   CahangeRect[1] = 1;
   updateOnce[0] = true;
   updateOnce[1] = false;
-  CheckToNext = 0;
   rectMode(CORNER);
   //StartPage Data Load
   ScreenSet = 0;
@@ -92,7 +92,8 @@ void setup(){
       PeoPlePicture[i][k] = loadImage("Picture/Character/" + i + "_" + k + ".png");
     } 
   }
-   
+  ScriptTableWH[0] = 1201;
+  ScriptTableWH[1] = 248;
   ScriptText[13] = ScriptText[13].substring(0,20) + "\n" + ScriptText[13].substring(20,ScriptText[13].length());
   ScriptText[14] = ScriptText[14].substring(0,25) + "\n" + ScriptText[14].substring(25,ScriptText[14].length());
   ScriptText[15] = ScriptText[15].substring(0,33) + "\n" + ScriptText[15].substring(25,ScriptText[15].length());
@@ -109,6 +110,7 @@ if (updateOnce[0]){
   if (ScreenSet == 0) StartPage();
   if (ScreenSet == 1) GamePage();
   
+  text(CheckToNext,0,40);
   
   if (ChangeBegin == true){
     if (ScreenSet == 0) ScreenChange(0,5);
@@ -138,6 +140,7 @@ void StartPage(){
 }
 
 void GamePage(){
+  
   if (updateOnce[0]){
   //Background
   if (CheckToNext <= ScriptText.length-1) tint(255, 255); image(BG[int(BGData[BGNext])],0,0);
@@ -146,34 +149,20 @@ void GamePage(){
     BackHomePage = false;
     if(PeoPleMoveType[CheckToNext].length() > 0) CharaCterAnimateSelect(int(PeoPleMoveType[CheckToNext]),PeoPlePicture[int(PeoPle1Type[CheckToNext])][int(PeoPle1Face[CheckToNext])],PeoPlePicture[int(PeoPle2Type[CheckToNext])][int(PeoPle2Face[CheckToNext])],PeoPleSite[CheckToNext],10,15);
     if(int(ChangeScenesOn[CheckToNext]) == 1) ChangeBegin = true;  
-    //if(int(ScriptOn[CheckToNext]) == 1) {
-     // if(CheckToNext == 23) ScriptLoad(23,32,true,15);
-      //if(CheckToNext == 38 || CheckToNext == 56 || CheckToNext == 116) ScriptLoad(CheckToNext,48,true,15);
-      //if(CheckToNext != 23 && CheckToNext != 38 && CheckToNext != 56 && CheckToNext != 116) ScriptLoad(CheckToNext,32,false,0); 
-    //}
-  }//else if ( CheckToNext == ScriptText.length-1 ){
-    //ScriptLoad(ScriptText.length-1,32,false,0);
-  //}else{
-   // BackHomePage = true;
-    //ChangeBegin = true;
-  //}
-  
-  
-   if (updateOnce[1] == false) updateOnce[1] = true; updateOnce[0] = false;
-  }
-  
-  if (CheckToNext < ScriptText.length-1){
-   if(int(ScriptOn[CheckToNext]) == 1) {
+    if(int(ScriptOn[CheckToNext]) == 1) {
       if(CheckToNext == 23) ScriptLoad(23,32,true,15);
       if(CheckToNext == 38 || CheckToNext == 56 || CheckToNext == 116) ScriptLoad(CheckToNext,48,true,15);
       if(CheckToNext != 23 && CheckToNext != 38 && CheckToNext != 56 && CheckToNext != 116) ScriptLoad(CheckToNext,32,false,0); 
     }
   }else if ( CheckToNext == ScriptText.length-1 ){
     ScriptLoad(ScriptText.length-1,32,false,0);
-    }else{
+  }else{
     BackHomePage = true;
     ChangeBegin = true;
-    
+  }
+  
+  
+   if (updateOnce[1] == false) updateOnce[1] = true; updateOnce[0] = false;
   }
   
   if (CheckToNext <= ScriptText.length-1 && int(SpecialObject[CheckToNext]) == 1) CheckToNext += 1; updateOnce[0] = true;
@@ -183,12 +172,12 @@ void mousePressed(){
   if(MousePressedOff == true){
   //StartPage Key
     if(ScreenSet == 0){
-      if(CheckStartPageIcon[0]) ChangeBegin = true;
+      if(CheckStartPageIcon[0]) ChangeBegin = true; 
       if(CheckStartPageIcon[2]) exit();
     }
   //GamePage Key
     if(ScreenSet == 1){
-      CheckToNext += 1;
+      if (mouseX < 100 && mouseY < 100){ CheckToNext += 10; }else{ CheckToNext += 1; }
       BGNext = CheckToNext;
       SiteStartSet = true;
       PeoPleTransparency = 0;
@@ -224,19 +213,19 @@ void ScreenChange(int ChangeType,int Rate){
 
 void ScriptLoad(int ScriptTextNumber,int ScriptTextSize,boolean DiffColor,int DiffColorBeginNumber){
   tint(255, 255*0.7);
-  image(ScriptTable[0],width/2-ScriptTable[0].width/2,height-ScriptTable[0].height-30);
+  image(ScriptTable[0],width/2-ScriptTableWH[0]/2,height-ScriptTableWH[1]-30);
   if(ScriptPeoPleName[ScriptTextNumber].length() > 0) image(ScriptTable[1],40,575);
   textSize(ScriptTextSize);
   fill(0);
   if(ScriptPeoPleName[ScriptTextNumber].length() > 0) text(ScriptPeoPleName[ScriptTextNumber],40+(ScriptTable[1].width/2)-(textWidth(ScriptPeoPleName[ScriptTextNumber])/2),575+89/2+ScriptTextSize/2);
   if (DiffColor && ScriptText[ScriptTextNumber].length() > DiffColorBeginNumber) {
     fill(255,0,0);
-    text(ScriptText[ScriptTextNumber],width/2-ScriptTable[0].width/2+50,height-ScriptTable[0].height-30+20,ScriptTable[0].width-100,ScriptTable[0].height-40);
+    text(ScriptText[ScriptTextNumber],width/2-ScriptTableWH[0]/2+50,height-ScriptTableWH[1]-30+20,ScriptTableWH[0]-100,ScriptTableWH[1]-40);
     fill(0);
-    text(ScriptText[ScriptTextNumber].substring(0,DiffColorBeginNumber-1),width/2-ScriptTable[0].width/2+50,height-ScriptTable[0].height-30+20,ScriptTable[0].width-100,ScriptTable[0].height-40);
+    text(ScriptText[ScriptTextNumber].substring(0,DiffColorBeginNumber-1),width/2-ScriptTableWH[0]/2+50,height-ScriptTableWH[1]-30+20,ScriptTableWH[0]-100,ScriptTableWH[1]-40);
   }else{
     fill(0);
-    text(ScriptText[ScriptTextNumber],int(width/2-ScriptTable[0].width/2+50),height-ScriptTable[0].height-30+20,ScriptTable[0].width-100,ScriptTable[0].height-40);
+    text(ScriptText[ScriptTextNumber],int(width/2-ScriptTableWH[0]/2+50),height-ScriptTableWH[1]-30+20,ScriptTableWH[0]-100,ScriptTableWH[1]-40);
   }
   updateOnce[1] = false;
 }
