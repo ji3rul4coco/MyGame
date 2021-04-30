@@ -6,7 +6,7 @@ int ScreenSet = 0;
 int [] CahangeRect = new int[2];
 boolean ChangeBegin = false;
 boolean MousePressedOff = true;
-boolean MousePressedOff2 = true;
+boolean []updateOnce = new boolean[2];
 
 //StartPage Random Set
 PImage StartPageBG;
@@ -25,7 +25,6 @@ String [] SpecialObject;
 String []BGData;
 PImage []BG = new PImage[7];
 int BGNext = 0;
-boolean StartDraw = false;
 
 //PeoPle Random Set
 int PeoPleMove , PeoPleTransparency; //PeoPleTransparency = 0; PeoPleMove = 0; on NextScript
@@ -48,6 +47,8 @@ void setup(){
   textFont(ScriptTextType);
   CahangeRect[0] = 0;
   CahangeRect[1] = 1;
+  updateOnce[0] = true;
+  updateOnce[1] = false;
   rectMode(CORNER);
   //StartPage Data Load
   ScreenSet = 0;
@@ -102,7 +103,9 @@ void setup(){
 }
 
 void draw(){
+background(158,23,59);
 
+if (updateOnce[0]){
   if (ScreenSet == 0) StartPage();
   if (ScreenSet == 1) GamePage();
   
@@ -113,6 +116,8 @@ void draw(){
     if (ScreenSet == 1 && BackHomePage == true) ScreenChange(2,5);
   }
 
+}
+  
 }
 
 
@@ -133,7 +138,10 @@ void StartPage(){
 }
 
 void GamePage(){
-  if (CheckToNext <= ScriptText.length-1) image(BG[int(BGData[BGNext])],0,0);
+  if (updateOnce[0]){
+  //Background
+  if (CheckToNext <= ScriptText.length-1) tint(255, 255); image(BG[int(BGData[BGNext])],0,0);
+  //People & Script
   if (CheckToNext < ScriptText.length-1){
     BackHomePage = false;
     if(PeoPleMoveType[CheckToNext].length() > 0) CharaCterAnimateSelect(int(PeoPleMoveType[CheckToNext]),PeoPlePicture[int(PeoPle1Type[CheckToNext])][int(PeoPle1Face[CheckToNext])],PeoPlePicture[int(PeoPle2Type[CheckToNext])][int(PeoPle2Face[CheckToNext])],PeoPleSite[CheckToNext],10,15);
@@ -149,12 +157,13 @@ void GamePage(){
     BackHomePage = true;
     ChangeBegin = true;
   }
-  if (CheckToNext <= ScriptText.length-1 && int(SpecialObject[CheckToNext]) == 1) CheckToNext += 1;
+   if (updateOnce[1] == false) updateOnce[1] = true; updateOnce[0] = false;
+  }
+  if (CheckToNext <= ScriptText.length-1 && int(SpecialObject[CheckToNext]) == 1) CheckToNext += 1; updateOnce[0] = true;
 }
 
-void mouseReleased(){
-  if(MousePressedOff == true && MousePressedOff2==true){
-StartDraw = true;
+void mousePressed(){
+  if(MousePressedOff == true){
   //StartPage Key
     if(ScreenSet == 0){
       if(CheckStartPageIcon[0]) ChangeBegin = true;
@@ -168,16 +177,11 @@ StartDraw = true;
       PeoPleTransparency = 0;
       PeoPleMove = 0;
     }
-    MousePressedOff2 = false;
+    updateOnce[0] = true;
   }
   
 }
 
-//void mouseReleased(){
-  
-//  MousePressedOff2 = true;
-  
-//}
 
 void ScreenChange(int ChangeType,int Rate){
  MousePressedOff = false;
@@ -254,12 +258,14 @@ void OnePeoPle(PImage PeoPleNumber,String Site,boolean TransparencyOpen,int Tran
   if (Site == "Left") image(PeoPleNumber,0,PeoPleCeilingDistance);
   if (Site == "Mid") image(PeoPleNumber,width/2-PeoPleNumber.width/2,PeoPleCeilingDistance);
   if (Site == "Right") image(PeoPleNumber,width-PeoPleNumber.width,PeoPleCeilingDistance);
+  if (min(255,(PeoPleTransparency += TransparencyRate)) == 255) {updateOnce[1] = false; }else{ updateOnce[1] = true;}
 }
 
 void TwoPeoPle(PImage PeoPleNumber1,PImage PeoPleNumber2,boolean TransparencyOpen,int TransparencyRate){
   if (TransparencyOpen) {tint(255, min(255,(PeoPleTransparency += TransparencyRate))); } else { tint(255, 255); }
   image(PeoPleNumber1,0,PeoPleCeilingDistance);
   image(PeoPleNumber2,width-PeoPleNumber2.width,PeoPleCeilingDistance); 
+  if (min(255,(PeoPleTransparency += TransparencyRate)) == 255) {updateOnce[1] = false; }else{ updateOnce[1] = true;}
 }
 
 void ThreePeoPle(PImage PeoPleNumber1,PImage PeoPleNumber2,PImage PeoPleNumber3,boolean TransparencyOpen,int TransparencyRate){
@@ -267,6 +273,7 @@ void ThreePeoPle(PImage PeoPleNumber1,PImage PeoPleNumber2,PImage PeoPleNumber3,
   image(PeoPleNumber1,0,PeoPleCeilingDistance);
   image(PeoPleNumber2,width/2-PeoPleNumber2.width/2,PeoPleCeilingDistance);
   image(PeoPleNumber3,width-PeoPleNumber3.width,PeoPleCeilingDistance); 
+  if (min(255,(PeoPleTransparency += TransparencyRate)) == 255) {updateOnce[1] = false; }else{ updateOnce[1] = true;}
 }
 
 void OneToTwoPeoPle(PImage PeoPleNumber1,PImage PeoPleNumber2,String Site,int Rate,boolean TransparencyOpen,int TransparencyRate){
@@ -280,9 +287,10 @@ void OneToTwoPeoPle(PImage PeoPleNumber1,PImage PeoPleNumber2,String Site,int Ra
   if (PeoPleMove >= width-PeoPleNumber1.width){
     if (TransparencyOpen) {tint(255, min(255,(PeoPleTransparency += TransparencyRate))); } else { tint(255, 255); }
     image(PeoPleNumber2,0,PeoPleCeilingDistance);
-    if (TransparencyOpen) { if(PeoPleTransparency >= 255){ MousePressedOff = true; }else{ MousePressedOff = false; } }else{ MousePressedOff = true; }
+    if (TransparencyOpen) { if(PeoPleTransparency >= 255){ MousePressedOff = true; updateOnce[1] = true; }else{ MousePressedOff = false; updateOnce[1] = false; } }else{ MousePressedOff = true; updateOnce[1] = true;}
   }else{
     MousePressedOff = false;
+    updateOnce[1] = false;
   }
 }
 
@@ -298,9 +306,10 @@ void OneToThreePeoPle(PImage PeoPleNumber1,PImage PeoPleNumber2,PImage PeoPleNum
     if (TransparencyOpen) {tint(255, min(255,(PeoPleTransparency += TransparencyRate))); } else { tint(255, 255); }
     image(PeoPleNumber2,0,PeoPleCeilingDistance);
     image(PeoPleNumber3,width/2-PeoPleNumber3.width/2,PeoPleCeilingDistance);
-    if (TransparencyOpen) { if(PeoPleTransparency >= 255){ MousePressedOff = true; }else{ MousePressedOff = false; } }else{ MousePressedOff = true; }
+    if (TransparencyOpen) { if(PeoPleTransparency >= 255){ MousePressedOff = true; updateOnce[1] = true;}else{ MousePressedOff = false; updateOnce[1] = false;} }else{ MousePressedOff = true; updateOnce[1] = true;}
   }else{
     MousePressedOff = false;
+    updateOnce[1] = false;
   }
 }
 
@@ -312,8 +321,10 @@ void OnePeoPleOff(PImage PeoPleNumber,String Site,int TransparencyRate){
   if (Site == "Right") image(PeoPleNumber,width-PeoPleNumber.width,PeoPleCeilingDistance);
   if (255-(PeoPleTransparency += TransparencyRate) <= 0){
     MousePressedOff = true;
+    updateOnce[1] = true;
   }else{
     MousePressedOff = false;
+    updateOnce[1] = false;
   }
 }
 void TwoPeoPleOff(PImage PeoPleNumber1,PImage PeoPleNumber2,int TransparencyRate){
@@ -322,8 +333,10 @@ void TwoPeoPleOff(PImage PeoPleNumber1,PImage PeoPleNumber2,int TransparencyRate
   image(PeoPleNumber2,width-PeoPleNumber2.width,PeoPleCeilingDistance); 
   if (255-(PeoPleTransparency += TransparencyRate) <= 0){
     MousePressedOff = true;
+    updateOnce[1] = true;
   }else{
     MousePressedOff = false;
+    updateOnce[1] = false;
   }
 }
 void ThreePeoPleOff(PImage PeoPleNumber1,PImage PeoPleNumber2,PImage PeoPleNumber3,int TransparencyRate){
@@ -333,7 +346,9 @@ void ThreePeoPleOff(PImage PeoPleNumber1,PImage PeoPleNumber2,PImage PeoPleNumbe
   image(PeoPleNumber3,width-PeoPleNumber3.width,PeoPleCeilingDistance); 
   if (255-(PeoPleTransparency += TransparencyRate) <= 0){
     MousePressedOff = true;
+    updateOnce[1] = true;
   }else{
     MousePressedOff = false;
+    updateOnce[1] = false;
   }
 }
