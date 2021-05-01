@@ -3,6 +3,8 @@
 int ScreenSet = 0;
 
 //ScreenChange Random Set
+int [] ChanceTypeSelect = new int[2];
+boolean ChangeRun = false;
 int [] CahangeRect = new int[2];
 boolean ChangeBegin = false;
 boolean MousePressedOff = true;
@@ -42,6 +44,26 @@ String [] PeoPleSite;
 //BackStartPage
 boolean BackHomePage = false;
 
+//Special Things
+
+  //AutoRead
+  int AutoReadRate = 20;
+  int AutoReadGo = 0;
+  boolean AutoReadOn = false;
+  
+  //SkipRead
+  int SkipReadRate = 5;
+  int SkipReadGo = 0;
+  boolean SkipReadOn = false;  
+  
+  //Q.Save & Q.Load
+  int [] QSaveData = new int[2];
+  boolean QLoad = false;
+    
+  //ScriptIcon
+  PImage [] ScriptIcon = new PImage[4];
+  boolean [] CheckScriptIcon = new boolean[4];
+
 void setup(){
   size(1280,960);
   ScriptTextType = createFont("Type.ttf", 32);
@@ -51,6 +73,9 @@ void setup(){
   updateOnce[0] = true;
   updateOnce[1] = false;
   rectMode(CORNER);
+  ChanceTypeSelect[0] = 0;
+  ChanceTypeSelect[1] = 5;
+  
   //StartPage Data Load
   ScreenSet = 0;
   for (int i = 0 ; i < 3 ; i ++) CheckStartPageIcon[i] = false;
@@ -98,9 +123,10 @@ void setup(){
   ScriptText[14] = ScriptText[14].substring(0,25) + "\n" + ScriptText[14].substring(25,ScriptText[14].length());
   ScriptText[15] = ScriptText[15].substring(0,33) + "\n" + ScriptText[15].substring(25,ScriptText[15].length());
   
-  CheckToNext=199;
-  
-  
+  //Special Things Update Data
+  for (int i = 0 ; i < 4 ; i ++) ScriptIcon[i] = loadImage("Picture/GameIcon_"+ (i+1) +".png");
+  QSaveData[0] = -1;
+  QSaveData[1] = -1;
   
 }
 
@@ -109,14 +135,23 @@ void draw(){
 if (updateOnce[0]){
   if (ScreenSet == 0) StartPage();
   if (ScreenSet == 1) GamePage();
-  
-  text(CheckToNext,0,40);
-  
+
   if (ChangeBegin == true){
-    if (ScreenSet == 0) ScreenChange(0,5);
-    if (ScreenSet == 1 && BackHomePage == false) ScreenChange(1,5);
-    if (ScreenSet == 1 && BackHomePage == true) ScreenChange(2,5);
+    if (ScreenSet == 0) ChanceTypeSelect[0] = 0;
+    if (ScreenSet == 1 && BackHomePage == false && QLoad == false) ChanceTypeSelect[0] = 1;
+    if (ScreenSet == 1 && BackHomePage == true && QLoad == false) ChanceTypeSelect[0] = 2;
+    if (ScreenSet == 1 && QLoad == true && QSaveData[0] != -1){
+      ChanceTypeSelect[0] = 3;
+      CheckScriptIcon[1] = false;
+    }
+    ChangeRun = true;
   }
+  
+  if (ChangeRun){
+    ScreenChange(ChanceTypeSelect[0],ChanceTypeSelect[1]);
+  }
+  
+  
 
 }
   
@@ -162,6 +197,9 @@ void GamePage(){
     ChangeBegin = true;
   }
   
+  //Icon
+  if(AutoReadOn == true && MousePressedOff == true) AutoScriptRead();
+  if(SkipReadOn == true && MousePressedOff == true) SkipScriptRead();
   
    if (updateOnce[1] == false) updateOnce[1] = true; updateOnce[0] = false;
   }
@@ -169,7 +207,7 @@ void GamePage(){
   if (CheckToNext <= ScriptText.length-1 && int(SpecialObject[CheckToNext]) == 1) CheckToNext += 1; updateOnce[0] = true;
 }
 
-void mousePressed(){
+void mouseClicked(){
   if(MousePressedOff == true){
   //StartPage Key
     if(ScreenSet == 0){
@@ -178,34 +216,65 @@ void mousePressed(){
     }
   //GamePage Key
     if(ScreenSet == 1){
-      if (mouseX < 100 && mouseY < 100){ CheckToNext = min(204,CheckToNext += 50); }else{ CheckToNext += 1; }
-      BGNext = CheckToNext;
-      SiteStartSet = true;
-      PeoPleTransparency = 0;
-      PeoPleMove = 0;
+      if(CheckScriptIcon[0] == false && CheckScriptIcon[1] == false && CheckScriptIcon[2] == false && CheckScriptIcon[3] == false){ 
+          CheckToNext += 1;
+          BGNext = CheckToNext;
+          SiteStartSet = true;
+          PeoPleTransparency = 0;
+          PeoPleMove = 0;
+          AutoReadOn = false;
+          SkipReadOn = false;
+      }
+      //GameIcon
+      if (CheckScriptIcon[2]) {
+        AutoReadOn =! AutoReadOn; 
+        CheckScriptIcon[2] = false;
+      }
+      if (CheckScriptIcon[3]) {
+        SkipReadOn =! SkipReadOn;
+        CheckScriptIcon[3] = false;
+      }
+      if (CheckScriptIcon[0]) {
+        QSaveData[0] = CheckToNext;
+        QSaveData[1] = BGNext;
+        CheckScriptIcon[0] = false;
+      }
+      if (CheckScriptIcon[1]){
+        QLoad = true;
+        ChangeBegin = true;
+        CheckScriptIcon[1] = false;
+      }
     }
     updateOnce[0] = true;
   }
   
 }
 
-
 void ScreenChange(int ChangeType,int Rate){
  MousePressedOff = false;
+ AutoReadOn = false;
+ SkipReadOn = false;
  fill(0,0,0,CahangeRect[0] += CahangeRect[1]*Rate); 
  rect(0,0,width,height);
  if (CahangeRect[0] >= 255){
   CahangeRect[1] *= -1;
   CahangeRect[0] = 255;
-  if (ChangeType == 0) ScreenSet += 1;
+  if (ChangeType == 0) ScreenSet += 1; 
   if (ChangeType == 2) ScreenSet = 0;
   if (ChangeType == 1) BGNext += 1;
+  if (ChangeType == 3) { 
+    CheckToNext = QSaveData[0]; 
+    BGNext = QSaveData[1]; 
+  }
+  
  }
  if (CahangeRect[0] <= 0){
   CahangeRect[1] *= -1;
   CahangeRect[0] = 0;
   ChangeBegin = false;
   MousePressedOff = true;
+  QLoad = false;
+  ChangeRun = false;
   if (ChangeType == 1) CheckToNext += 1;
   if (ChangeType == 0) CheckToNext = 1;
  }
@@ -214,6 +283,7 @@ void ScreenChange(int ChangeType,int Rate){
 
 void ScriptLoad(int ScriptTextNumber,int ScriptTextSize,boolean DiffColor,int DiffColorBeginNumber){
   tint(255, 255*0.7);
+  ScriptIconUpdate();
   image(ScriptTable[0],width/2-ScriptTableWH[0]/2,height-ScriptTableWH[1]-30);
   if(ScriptPeoPleName[ScriptTextNumber].length() > 0) image(ScriptTable[1],40,575);
   textSize(ScriptTextSize);
@@ -360,4 +430,29 @@ void ThreePeoPleOff(PImage PeoPleNumber1,PImage PeoPleNumber2,PImage PeoPleNumbe
     MousePressedOff = false;
     updateOnce[1] = false;
   }
+}
+
+
+void AutoScriptRead(){
+    AutoReadGo += 1;
+    if (AutoReadGo % AutoReadRate == 0) {CheckToNext = min(ScriptText.length-1,CheckToNext += 1); BGNext = CheckToNext;}
+}
+
+void SkipScriptRead(){
+    SkipReadGo += 1;
+    if (SkipReadGo % SkipReadRate == 0) {CheckToNext = min(ScriptText.length-1,CheckToNext += 1); BGNext = CheckToNext;}
+}
+
+void ScriptIconUpdate(){
+ for (int i = 0 ; i < 4 ; i ++) {
+   image(ScriptIcon[i],width/2+ScriptTableWH[0]/2-(ScriptIcon[i].width*(4-i))-10*(3-i),height-ScriptTableWH[1]-ScriptIcon[i].height-40);
+   if(MousePressedOff){
+     if (mouseX > width/2+ScriptTableWH[0]/2-(ScriptIcon[i].width*(4-i))-10*(3-i) && mouseX < width/2+ScriptTableWH[0]/2-(ScriptIcon[i].width*(3-i))-10*(3-i) && mouseY > height-ScriptTableWH[1]-ScriptIcon[i].height-40 && mouseY < height-ScriptTableWH[1]-40){
+       CheckScriptIcon[i] = true; 
+     }else{
+       CheckScriptIcon[i]=false;
+       }
+   }
+ }
+  
 }
