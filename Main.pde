@@ -1,7 +1,7 @@
 
 
 int ScreenSet = 0;
-
+int StopMouse = 0;
 //ScreenChange Random Set
 int [] ChanceTypeSelect = new int[2];
 boolean ChangeRun = false;
@@ -131,7 +131,7 @@ void setup(){
 }
 
 void draw(){
-  
+  StopMouse = max(0 ,StopMouse-=1);
 if (updateOnce[0]){
   if (ScreenSet == 0) StartPage();
   if (ScreenSet == 1) GamePage();
@@ -208,7 +208,8 @@ void GamePage(){
 }
 
 void mouseClicked(){
-  if(MousePressedOff == true){
+  if(MousePressedOff == true  && StopMouse == 0){
+  StopMouse += 20;
   //StartPage Key
     if(ScreenSet == 0){
       if(CheckStartPageIcon[0]) ChangeBegin = true; 
