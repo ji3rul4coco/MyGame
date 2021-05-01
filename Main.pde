@@ -65,7 +65,7 @@ boolean BackHomePage = false;
   boolean [] CheckScriptIcon = new boolean[4];
 
 void setup(){
-  size(1280,960);
+  size(1280,960,P2D);
   ScriptTextType = createFont("Type.ttf", 32);
   textFont(ScriptTextType);
   CahangeRect[0] = 0;
