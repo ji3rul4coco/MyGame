@@ -1,7 +1,7 @@
 
 
 int ScreenSet = 0;
-int StopMouse = 0;
+
 //ScreenChange Random Set
 int [] ChanceTypeSelect = new int[2];
 boolean ChangeRun = false;
@@ -79,13 +79,13 @@ void setup(){
   //StartPage Data Load
   ScreenSet = 0;
   for (int i = 0 ; i < 3 ; i ++) CheckStartPageIcon[i] = false;
-  StartPageBG = loadImage("Picture/TitlePage.jpg");
-  StartPageIcon[0] = loadImage("Picture/Start_A.jpg");
-  StartPageIcon[1] = loadImage("Picture/Start_B.jpg");
-  StartPageIcon[2] = loadImage("Picture/Continue_A.jpg");
-  StartPageIcon[3] = loadImage("Picture/Continue_B.jpg");
-  StartPageIcon[4] = loadImage("Picture/Exit_A.jpg");
-  StartPageIcon[5] = loadImage("Picture/Exit_B.jpg");
+  StartPageBG = requestImage("Picture/TitlePage.jpg");
+  StartPageIcon[0] = requestImage("Picture/Start_A.jpg");
+  StartPageIcon[1] = requestImage("Picture/Start_B.jpg");
+  StartPageIcon[2] = requestImage("Picture/Continue_A.jpg");
+  StartPageIcon[3] = requestImage("Picture/Continue_B.jpg");
+  StartPageIcon[4] = requestImage("Picture/Exit_A.jpg");
+  StartPageIcon[5] = requestImage("Picture/Exit_B.jpg");
   StartPageIconWH[0] = 421;
   StartPageIconWH[1] = 108;
   StartPageIconXY[0][0] = width/2-StartPageIconWH[0]/2;
@@ -109,12 +109,12 @@ void setup(){
   SpecialObject = loadStrings("Data/SpecialObject.txt");
   BGData = loadStrings("Data/BackGround_Change.txt");
   for (int i = 0 ; i < PeoPleSite.length ; i++){ if(int(PeoPleSite[i]) == 0) PeoPleSite[i] = "Left"; if(int(PeoPleSite[i]) == 1) PeoPleSite[i] = "Mid"; if(int(PeoPleSite[i]) == 2) PeoPleSite[i] = "Right"; }
-  ScriptTable[0] =loadImage("Picture/Script_Table.png");
-  ScriptTable[1] =loadImage("Picture/Script_Name.gif");
+  ScriptTable[0] =requestImage("Picture/Script_Table.png");
+  ScriptTable[1] =requestImage("Picture/Script_Name.gif");
   for (int i = 0 ; i < 7 ; i ++){
-    BG[i] = loadImage("Picture/BackGround/"+ i +".jpg");
+    BG[i] = requestImage("Picture/BackGround/"+ i +".jpg");
     for (int k = 0 ; k < 11 ; k ++){
-      PeoPlePicture[i][k] = loadImage("Picture/Character/" + i + "_" + k + ".png");
+      PeoPlePicture[i][k] = requestImage("Picture/Character/" + i + "_" + k + ".png");
     } 
   }
   ScriptTableWH[0] = 1201;
@@ -124,14 +124,14 @@ void setup(){
   ScriptText[15] = ScriptText[15].substring(0,33) + "\n" + ScriptText[15].substring(25,ScriptText[15].length());
   
   //Special Things Update Data
-  for (int i = 0 ; i < 4 ; i ++) ScriptIcon[i] = loadImage("Picture/GameIcon_"+ (i+1) +".png");
+  for (int i = 0 ; i < 4 ; i ++) ScriptIcon[i] = requestImage("Picture/GameIcon_"+ (i+1) +".png");
   QSaveData[0] = -1;
   QSaveData[1] = -1;
   
 }
 
 void draw(){
-  StopMouse = max(0 ,StopMouse-=1);
+  
 if (updateOnce[0]){
   if (ScreenSet == 0) StartPage();
   if (ScreenSet == 1) GamePage();
@@ -208,8 +208,7 @@ void GamePage(){
 }
 
 void mouseClicked(){
-  if(MousePressedOff == true  && StopMouse == 0){
-  StopMouse += 20;
+  if(MousePressedOff == true){
   //StartPage Key
     if(ScreenSet == 0){
       if(CheckStartPageIcon[0]) ChangeBegin = true; 
