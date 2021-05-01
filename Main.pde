@@ -181,7 +181,7 @@ void GamePage(){
   //People & Script
   if (CheckToNext < ScriptText.length-1){
     tint(255, 255); 
-    image(BG[int(BGData[BGNext])],0,0);
+    background(BG[int(BGData[BGNext])]);
     BackHomePage = false;
     if(PeoPleMoveType[CheckToNext].length() > 0) CharaCterAnimateSelect(int(PeoPleMoveType[CheckToNext]),PeoPlePicture[int(PeoPle1Type[CheckToNext])][int(PeoPle1Face[CheckToNext])],PeoPlePicture[int(PeoPle2Type[CheckToNext])][int(PeoPle2Face[CheckToNext])],PeoPleSite[CheckToNext],10,15);
     if(int(ChangeScenesOn[CheckToNext]) == 1) ChangeBegin = true;  
