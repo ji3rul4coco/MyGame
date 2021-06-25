@@ -235,6 +235,7 @@ void setup(){
   PeoPlePicture[0][8] = requestImage("Picture/0_8.png");
   PeoPlePicture[1][0] = requestImage("Picture/1_0.png");
   PeoPlePicture[1][2] = requestImage("Picture/1_2.png");
+  PeoPlePicture[1][3] = requestImage("Picture/1_3.png");
   PeoPlePicture[1][5] = requestImage("Picture/1_5.png");
   PeoPlePicture[1][10] = requestImage("Picture/1_10.png");
   PeoPlePicture[2][0] = requestImage("Picture/2_0.png");
@@ -242,6 +243,7 @@ void setup(){
   PeoPlePicture[3][0] = requestImage("Picture/3_0.png");
   PeoPlePicture[3][1] = requestImage("Picture/3_1.png");
   PeoPlePicture[3][2] = requestImage("Picture/3_2.png");
+  PeoPlePicture[3][3] = requestImage("Picture/3_3.png");
   PeoPlePicture[3][5] = requestImage("Picture/3_5.png");
   PeoPlePicture[3][7] = requestImage("Picture/3_7.png");
   PeoPlePicture[3][8] = requestImage("Picture/3_8.png");
