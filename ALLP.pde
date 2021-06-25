@@ -439,8 +439,8 @@ void MainGamePage(){
     if(int(ChangeScenesOn[CheckToNext]) == 1) ChangeBegin = true;  
     if(int(ScriptOn[CheckToNext]) == 1) {
       if(CheckToNext == 24) ScriptLoad(CheckToNext,25,true,15);
-      if(CheckToNext == 39 || CheckToNext == 57 || CheckToNext == 117) ScriptLoad(CheckToNext,48,true,15);
-      if(CheckToNext != 24 && CheckToNext != 39 && CheckToNext != 57 && CheckToNext != 117) ScriptLoad(CheckToNext,25,false,0); 
+      if(CheckToNext == 39 || CheckToNext == 57 || CheckToNext == 118) ScriptLoad(CheckToNext,48,true,15);
+      if(CheckToNext != 24 && CheckToNext != 39 && CheckToNext != 57 && CheckToNext != 118) ScriptLoad(CheckToNext,25,false,0); 
     }
   }else if ( CheckToNext == ScriptText.length-1 ){
     ScriptLoad(ScriptText.length-1,25,false,0);
