@@ -182,7 +182,7 @@ int GameType = 0;
 
  
 void setup(){
-  size(900,675,P3D);
+  size(900,675,P2D);
   Mywidth = 900;
   ScriptTextType = createFont("Type.ttf", 32);
   textFont(ScriptTextType);
